@@ -263,20 +263,21 @@ CHAR_MAP = {c["id"]: c for c in CHARS}
 def get_client():
     """secrets.toml의 서비스 계정 JSON으로 AnthropicVertex 클라이언트 생성"""
     try:
-        if "gcp_credentials" not in st.secrets:
-            return None, None, "secrets.toml에 [gcp_credentials] 섹션이 없습니다."
-        if "gcp" not in st.secrets:
-            return None, None, "secrets.toml에 [gcp] 섹션이 없습니다."
+        if "gcp_service_account" not in st.secrets:
+            return None, None, "secrets.toml에 [gcp_service_account] 섹션이 없습니다."
 
-        creds_dict = dict(st.secrets["gcp_credentials"])
+        creds_dict = dict(st.secrets["gcp_service_account"])
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(creds_dict, f)
             tmp_path = f.name
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_path
 
-        project_id = st.secrets["gcp"]["project_id"]
-        location   = st.secrets["gcp"].get("location", "us-east5")
-        model      = st.secrets["gcp"].get("model", "claude-sonnet-4-5@20251001")
+        project_id = creds_dict["project_id"]
+        location   = "us-east5"
+        model      = "claude-sonnet-4-5@20251001"
+        if "gcp" in st.secrets:
+            location = st.secrets["gcp"].get("location", location)
+            model    = st.secrets["gcp"].get("model", model)
 
         client = AnthropicVertex(region=location, project_id=project_id)
         return client, model, None
