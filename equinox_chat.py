@@ -1,5 +1,10 @@
+import json
+import tempfile
+import os
 import streamlit as st
 from anthropic import AnthropicVertex
+import google.auth
+import google.oauth2.service_account
 
 # ── 페이지 설정 ──────────────────────────────────────
 st.set_page_config(
@@ -89,6 +94,25 @@ html, body, [class*="css"] {
 section[data-testid="stSidebar"] {
     background: #0A0A14 !important;
     border-right: 1px solid rgba(255,255,255,0.07);
+}
+
+/* 버튼 */
+.stButton > button {
+    background: #13131F !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    color: #A0A0C0 !important;
+    border-radius: 8px !important;
+}
+.stButton > button:hover {
+    background: #1A1A2E !important;
+    border-color: rgba(255,255,255,0.2) !important;
+    color: #E8E8F0 !important;
+}
+
+/* 채팅 입력 */
+.stChatInput > div {
+    background: #0E0E1A !important;
+    border-color: rgba(255,255,255,0.1) !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -235,36 +259,64 @@ CHARS = [
 
 CHAR_MAP = {c["id"]: c for c in CHARS}
 
+
+# ── Vertex AI 클라이언트 (서비스 계정 인증) ────────────
+@st.cache_resource
+def get_client():
+    """Streamlit Secrets의 서비스 계정 JSON으로 AnthropicVertex 클라이언트 생성"""
+    try:
+        creds_dict = dict(st.secrets["gcp_credentials"])
+        # 서비스 계정 JSON을 임시 파일에 써서 환경변수로 지정
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False
+        ) as f:
+            json.dump(creds_dict, f)
+            tmp_path = f.name
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_path
+
+        project_id = st.secrets["gcp"]["project_id"]
+        location   = st.secrets["gcp"].get("location", "us-east5")
+        return AnthropicVertex(region=location, project_id=project_id), None
+    except Exception as e:
+        return None, str(e)
+
+
 # ── 세션 상태 초기화 ──────────────────────────────────
-if "char_id" not in st.session_state:
-    st.session_state.char_id = None
+if "char_id"  not in st.session_state:
+    st.session_state.char_id  = None
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# ── 사이드바: Vertex AI 설정 ──────────────────────────
+
+# ── 사이드바 ──────────────────────────────────────────
 with st.sidebar:
-    st.markdown("### ⚙ Vertex AI 설정")
-    project_id = st.text_input("Project ID", placeholder="my-gcp-project")
-    location   = st.text_input("Location", value="us-east5")
-    model      = st.text_input("Model", value="claude-sonnet-4-5@20251001")
+    st.markdown("### ⚔️ EQUINOX")
+    st.markdown("<span style='font-size:11px;color:#44445A;letter-spacing:3px'>에키녹스의 검</span>", unsafe_allow_html=True)
     st.markdown("---")
     if st.session_state.char_id:
         if st.button("← 갤러리로 돌아가기", use_container_width=True):
-            st.session_state.char_id = None
+            st.session_state.char_id  = None
             st.session_state.messages = []
             st.rerun()
+    else:
+        st.markdown("<span style='font-size:12px;color:#55556A'>캐릭터를 선택해 대화를 시작하세요</span>", unsafe_allow_html=True)
+
 
 # ── 헤더 ─────────────────────────────────────────────
 st.markdown("""
 <div class="eq-header">
   <div class="eq-logo">EQUINOX</div>
-  <div class="eq-sub">에키녹스의 검</div>
+  <div class="eq-sub">에키녹스의 검 · CHARACTER CHAT</div>
 </div>
 """, unsafe_allow_html=True)
 
+
 # ── 갤러리 뷰 ─────────────────────────────────────────
 if st.session_state.char_id is None:
-    st.markdown("##### 캐릭터를 선택하면 대화를 시작할 수 있어요")
+    st.markdown(
+        "<p style='color:#55556A;font-size:13px;margin-bottom:20px'>캐릭터를 선택하면 대화를 시작할 수 있어요</p>",
+        unsafe_allow_html=True,
+    )
     cols = st.columns(2)
     for i, c in enumerate(CHARS):
         with cols[i % 2]:
@@ -277,20 +329,24 @@ if st.session_state.char_id is None:
                   <div class="char-name" style="color:{c['accent']}">{c['name']}</div>
                   <div style="font-size:11px;color:#44445A">{c['age']}</div>
                 </div>
-                <span style="margin-left:auto;font-size:10px;padding:2px 8px;border-radius:6px;background:{c['color']}22;color:{c['color']};border:1px solid {c['color']}44">{c['origin']}</span>
+                <span style="margin-left:auto;font-size:10px;padding:2px 8px;border-radius:6px;
+                  background:{c['color']}22;color:{c['color']};border:1px solid {c['color']}44">
+                  {c['origin']}
+                </span>
               </div>
               <div class="char-role" style="color:{c['color']}">{c['role']}</div>
               <div class="char-desc">{c['desc']}</div>
               <div class="char-tags">{tags_html}</div>
-              <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05);font-size:10px;color:#44445A">{c['mbti']}</div>
+              <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05);
+                font-size:10px;color:#44445A">{c['mbti']}</div>
             </div>
             """, unsafe_allow_html=True)
-            if st.button(f"대화하기", key=c["id"], use_container_width=True):
-                st.session_state.char_id = c["id"]
-                st.session_state.messages = [
-                    {"role": "assistant", "content": c["greeting"]}
-                ]
+
+            if st.button(f"{c['emoji']} 대화하기", key=c["id"], use_container_width=True):
+                st.session_state.char_id  = c["id"]
+                st.session_state.messages = [{"role": "assistant", "content": c["greeting"]}]
                 st.rerun()
+
 
 # ── 채팅 뷰 ──────────────────────────────────────────
 else:
@@ -298,12 +354,17 @@ else:
 
     # 캐릭터 헤더
     tags_html = "".join(
-        f'<span style="font-size:10px;padding:2px 8px;border-radius:6px;background:{c["color"]}22;color:{c["color"]};border:1px solid {c["color"]}44;margin-right:4px">{t}</span>'
+        f'<span style="font-size:10px;padding:2px 8px;border-radius:6px;'
+        f'background:{c["color"]}22;color:{c["color"]};border:1px solid {c["color"]}44;margin-right:4px">'
+        f'{t}</span>'
         for t in c["tags"]
     )
     st.markdown(f"""
-    <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid {c['color']}22;margin-bottom:16px">
-      <div style="width:48px;height:48px;border-radius:13px;background:{c['color']}20;border:1.5px solid {c['color']}44;display:flex;align-items:center;justify-content:center;font-size:24px">{c['emoji']}</div>
+    <div style="display:flex;align-items:center;gap:14px;padding:12px 0;
+      border-bottom:1px solid {c['color']}22;margin-bottom:16px">
+      <div style="width:48px;height:48px;border-radius:13px;background:{c['color']}20;
+        border:1.5px solid {c['color']}44;display:flex;align-items:center;
+        justify-content:center;font-size:24px">{c['emoji']}</div>
       <div>
         <div style="font-size:18px;font-weight:700;color:{c['accent']}">{c['name']}</div>
         <div style="font-size:11px;color:#44445A;margin-top:2px">{c['role']} · {c['mbti']}</div>
@@ -317,7 +378,10 @@ else:
         if m["role"] == "assistant":
             st.markdown(f"""
             <div class="msg-wrap-ai">
-              <div class="msg-avatar" style="background:{c['color']}20;border:1px solid {c['color']}30">{c['emoji']}</div>
+              <div class="msg-avatar"
+                style="background:{c['color']}20;border:1px solid {c['color']}30">
+                {c['emoji']}
+              </div>
               <div class="msg-ai">{m['content']}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -331,12 +395,14 @@ else:
     # 입력
     user_input = st.chat_input(f"{c['name']}에게 말하기...")
     if user_input:
-        if not project_id:
-            st.error("사이드바에서 GCP Project ID를 입력해주세요.")
+        st.session_state.messages.append({"role": "user", "content": user_input})
+
+        client, err = get_client()
+        if err:
+            reply = f"⚠️ 인증 오류: {err}"
         else:
-            st.session_state.messages.append({"role": "user", "content": user_input})
             try:
-                client = AnthropicVertex(region=location, project_id=project_id)
+                model = st.secrets["gcp"].get("model", "claude-sonnet-4-5@20251001")
                 response = client.messages.create(
                     model=model,
                     max_tokens=1000,
@@ -345,6 +411,7 @@ else:
                 )
                 reply = response.content[0].text
             except Exception as e:
-                reply = f"오류가 발생했습니다: {e}"
-            st.session_state.messages.append({"role": "assistant", "content": reply})
-            st.rerun()
+                reply = f"⚠️ API 오류: {e}"
+
+        st.session_state.messages.append({"role": "assistant", "content": reply})
+        st.rerun()
