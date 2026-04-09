@@ -3,8 +3,6 @@ import tempfile
 import os
 import streamlit as st
 from anthropic import AnthropicVertex
-import google.auth
-import google.oauth2.service_account
 
 # ── 페이지 설정 ──────────────────────────────────────
 st.set_page_config(
@@ -260,25 +258,31 @@ CHARS = [
 CHAR_MAP = {c["id"]: c for c in CHARS}
 
 
-# ── Vertex AI 클라이언트 (서비스 계정 인증) ────────────
+# ── Vertex AI 클라이언트 ───────────────────────────────
 @st.cache_resource
 def get_client():
-    """Streamlit Secrets의 서비스 계정 JSON으로 AnthropicVertex 클라이언트 생성"""
+    """secrets.toml의 서비스 계정 JSON으로 AnthropicVertex 클라이언트 생성"""
     try:
+        if "gcp_credentials" not in st.secrets:
+            return None, None, "secrets.toml에 [gcp_credentials] 섹션이 없습니다."
+        if "gcp" not in st.secrets:
+            return None, None, "secrets.toml에 [gcp] 섹션이 없습니다."
+
         creds_dict = dict(st.secrets["gcp_credentials"])
-        # 서비스 계정 JSON을 임시 파일에 써서 환경변수로 지정
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(creds_dict, f)
             tmp_path = f.name
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_path
 
         project_id = st.secrets["gcp"]["project_id"]
         location   = st.secrets["gcp"].get("location", "us-east5")
-        return AnthropicVertex(region=location, project_id=project_id), None
+        model      = st.secrets["gcp"].get("model", "claude-sonnet-4-5@20251001")
+
+        client = AnthropicVertex(region=location, project_id=project_id)
+        return client, model, None
+
     except Exception as e:
-        return None, str(e)
+        return None, None, str(e)
 
 
 # ── 세션 상태 초기화 ──────────────────────────────────
@@ -397,12 +401,11 @@ else:
     if user_input:
         st.session_state.messages.append({"role": "user", "content": user_input})
 
-        client, err = get_client()
+        client, model, err = get_client()
         if err:
-            reply = f"⚠️ 인증 오류: {err}"
+            reply = f"⚠️ 설정 오류: {err}"
         else:
             try:
-                model = st.secrets["gcp"].get("model", "claude-sonnet-4-5@20251001")
                 response = client.messages.create(
                     model=model,
                     max_tokens=1000,
