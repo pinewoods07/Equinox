@@ -1,5 +1,6 @@
 import streamlit as st
-import anthropic
+import vertexai
+from vertexai.generative_models import GenerativeModel, Content, Part
 from google.oauth2 import service_account
 
 # ── 페이지 설정 ──────────────────────────────────────────────────
@@ -11,7 +12,7 @@ st.set_page_config(
 
 # ── Vertex AI 인증 (서비스 계정 JSON) ─────────────────────────────
 @st.cache_resource
-def get_client():
+def init_vertex():
     sa = st.secrets["gcp_service_account"]
     sa_info = {k: sa[k] for k in [
         "type", "project_id", "private_key_id", "private_key",
@@ -22,13 +23,13 @@ def get_client():
         sa_info,
         scopes=["https://www.googleapis.com/auth/cloud-platform"]
     )
-    return anthropic.AnthropicVertex(
-        project_id=sa_info["project_id"],
-        region="us-east5",
+    vertexai.init(
+        project=sa_info["project_id"],
+        location="us-central1",
         credentials=credentials,
     )
 
-client = get_client()
+init_vertex()
 
 # ── 공통 멤버 정보 ─────────────────────────────────────────────────
 MEMBERS_INFO = """
@@ -396,20 +397,19 @@ def main():
         if send and user_input.strip():
             st.session_state.messages.append({"role": "user", "content": user_input})
 
-            # Claude (Vertex AI) 호출
+            # Gemini 3.1 Pro Preview (Vertex AI) 호출
             try:
-                history = [
-                    {"role": m["role"], "content": m["content"]}
-                    for m in st.session_state.messages[:-1]
-                ] + [{"role": "user", "content": user_input}]
-
-                response = client.messages.create(
-                    model="claude-3-5-haiku@20241022",
-                    max_tokens=512,
-                    system=char["prompt"],
-                    messages=history,
+                model = GenerativeModel(
+                    "gemini-3.1-pro-preview",
+                    system_instruction=char["prompt"],
                 )
-                reply = response.content[0].text
+                history = [
+                    Content(role=m["role"], parts=[Part.from_text(m["content"])])
+                    for m in st.session_state.messages[:-1]
+                ]
+                chat = model.start_chat(history=history)
+                response = chat.send_message(user_input)
+                reply = response.text
             except Exception as e:
                 reply = f"...지금은 대화하기 어렵습니다. ({e})"
 
