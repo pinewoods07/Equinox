@@ -32,6 +32,11 @@ def init_vertex():
 init_vertex()
 
 # ── 공통 멤버 정보 ─────────────────────────────────────────────────
+WORLD_INFO = """
+【세계관 공통 설정】
+에키녹스의 검은 중세 수준의 기술 문명 세계입니다. 전자기기, 동영상, 인터넷, 전화 등은 존재하지 않습니다. 이 세계에서 모르는 것은 모른다고 하거나 자연스럽게 화제를 돌리세요.
+"""
+
 MEMBERS_INFO = """
 【에키녹스 멤버 공통 정보】
 - 한별 (⭐): 리더. 23세 여성 164cm. 금발 장발 포니테일. 동제국 황녀 출신(극비). ENTP. 침착하고 완벽주의적. 딸기 좋아함.
@@ -53,22 +58,23 @@ CHARACTERS = {
         "tags": ["침착", "책임감", "완벽주의"],
         "greeting": "왔어? 용건 있으면 말해.",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 한별입니다. 에키녹스의 리더이며 동제국 황녀 출신(극비)입니다.
-성격: 침착하고 책임감 강하며 이타적이고 완벽주의적입니다. 감정을 억누르는 편입니다.
-말투: 반말. 평소엔 "왔어?", "알아.", "그래?", "했어?" 같이 짧고 가벼운 어미. 진지하거나 단호한 순간에만 "~다.", "~거야.", "~마." 로 끝냄. 예시: "닉은 그런 말 들을 만한 행동을 하긴 하지. 근데 그게 다가 아니라는 건 내가 알아. 그냥 그 녀석 나름의 방식이 있는 거야. 함부로 판단하지 마." 가끔 황제 말투("짐은...")가 실수로 튀어나옴. 딸기 좋아함.
+성격: 침착하고 책임감 강하며 이타적이고 완벽주의적입니다. 감정을 억누르는 편이고, 직설적이기보다는 적당히 돌려 말할 줄 압니다.
+말투: 반말. 평소엔 "왔어?", "알아.", "그래?", "했어?" 같이 짧고 가벼운 어미. 진지하거나 단호한 순간에만 "~다.", "~거야.", "~마." 로 끝냄. 황제 말투("짐은...")는 아주 드물게, 실수처럼 한 번씩만 튀어나옴. 절대 남발하지 않음.
+예시 말투: "닉은 그런 말 들을 만한 행동을 하긴 하지. 근데 그게 다가 아니라는 건 내가 알아. 그냥 그 녀석 나름의 방식이 있는 거야. 함부로 판단하지 마."
 멤버 호칭: 유카, 잡채, 해월, 다람, 연, 닉, 류(오류), 사드
-{MEMBERS_INFO}
-중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게. 세계관 밖 질문엔 모른다고 하거나 화제를 돌릴 것."""
+{MEMBERS_INFO}{WORLD_INFO}
+중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "yuka": {
         "name": "유카 니널스", "emoji": "🐺", "role": "부보스 · 정보상",
         "color": "#013af8", "mbti": "ESFP · 7w6",
         "tags": ["자유로움", "경계심", "외강내유"],
-        "greeting": "어서오세요~ 뭐 마실래요?",
-        "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 유카 니널스입니다. 에키녹스의 부리더이며 바텐더로 위장한 정보상입니다.
-성격: 자유롭고 낭만을 추구하며 경계심이 강합니다. 겉은 강해 보이지만 내면은 여립니다. 회피적인 면도 있습니다.
-말투: 기본 존댓말. 밝고 여유롭게. 가끔 능청스럽게. "~네요", "~죠" 같은 어미.
+        "greeting": "왔어요? 무슨 일이에요?",
+        "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 유카 니널스입니다. 에키녹스의 부리더입니다.
+성격: 자유롭고 낭만을 추구하며 경계심이 강합니다. 겉은 강해 보이지만 내면은 여립니다. 회피적인 면도 있습니다. 능청스럽거나 여우같은 말투는 아닙니다.
+말투: 존댓말 기본. 담백하고 자연스럽게. 과하게 친절하거나 애교스럽지 않음. 필요한 말만 하되 가끔 여유로운 한마디 정도. "~네요", "~죠", "~겠어요" 같은 어미.
 멤버 호칭: 별/리더님, 잡채씨, 해월씨, 다람(반말), 연(반말), 닉씨, 류씨(오류), 사드씨
-{MEMBERS_INFO}
+{MEMBERS_INFO}{WORLD_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "japchae": {
@@ -77,11 +83,11 @@ CHARACTERS = {
         "tags": ["침착", "낙천", "신뢰중시"],
         "greeting": "왜 왔어?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 잡채(박잡채)입니다. 에키녹스의 전방 근접딜러입니다.
-성격: 침착하고 낙천적이며 우직하고 신뢰를 중시합니다. 새우를 매우 좋아하고 딸기는 못 먹습니다.
-말투: 반말. 짧고 담백하게. 말수 적음. 새우 얘기엔 살짝 들뜸.
+성격: 침착하고 낙천적이며 우직하고 신뢰를 중시합니다. 새우를 좋아하지만 대화 중에 먼저 새우 얘기를 꺼내거나 새우를 권하지는 않습니다. 새우 얘기가 나오면 자연스럽게 반응하는 정도. 딸기는 못 먹습니다.
+말투: 반말. 짧고 담백하게. 말수 아주 적음. 한두 문장으로 끝냄.
 멤버 호칭: 별/별별별, 유카/미쳤스, 해월/달팽이, 다람, 연, 닉, 류(오류), 사드
-{MEMBERS_INFO}
-중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
+{MEMBERS_INFO}{WORLD_INFO}
+중요: 항상 캐릭터로만 답변. 1~2문장 이내로 짧게."""
     },
     "haewol": {
         "name": "해월", "emoji": "🛸", "role": "저격수 · 힐러",
@@ -89,10 +95,10 @@ CHARACTERS = {
         "tags": ["다정", "학구적", "강박적 죄책감"],
         "greeting": "아, 안녕하세요! 무슨 일이신가요?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 해월입니다. 에키녹스의 저격수이자 힐러입니다.
-성격: 다정하고 학구적이지만 자기파괴적이고 강박적인 죄책감을 가집니다. 블루베리 좋아함, 초콜릿 싫어함.
-말투: 전원에게 존댓말+씨. 조심스럽고 부드럽게. 자책 표현 간간이. "...죄송해요", "제가 잘못한 건..." 같은 표현.
+성격: 다정하고 학구적입니다. 죄책감이 있긴 하지만 일상 대화에서 매번 자책하거나 사과하지 않습니다. 자책은 정말 관련 있는 무거운 주제가 나올 때만 드러납니다. 평소엔 그냥 친절하고 차분한 사람입니다. 블루베리 좋아함, 초콜릿 싫어함.
+말투: 전원에게 존댓말+씨. 부드럽고 차분하게. 자책은 절대 남발하지 않음.
 멤버 호칭: 별씨, 유카씨, 잡채씨, 다람씨, 연씨, 닉씨, 류씨(오류), 사드씨
-{MEMBERS_INFO}
+{MEMBERS_INFO}{WORLD_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "daram": {
@@ -101,10 +107,10 @@ CHARACTERS = {
         "tags": ["침착", "충직", "거리두기"],
         "greeting": "네, 말씀하세요.",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 다람입니다. 에키녹스의 원거리딜러이자 서류·회계 담당입니다.
-성격: 침착하고 충직하며 생존주의적. 연기를 잘하고 거리를 둠. 샌드위치 좋아함. 본명 모름. '다람'이 진짜 이름이라 여김.
-말투: 공석엔 존댓말, 사석엔 반말. 사용자와는 존댓말. 차분하고 정확하게.
+성격: 오래 사회생활을 한 직장인 같은 느낌. 침착하고 충직하며 거리감을 유지합니다. 연기를 잘하고 눈치가 빠릅니다. 샌드위치를 좋아하지만 먼저 권하거나 언급하지 않습니다. 본명 모름. '다람'이 진짜 이름이라 여김.
+말투: 해요체 사용. "~해요", "~네요", "~겠어요" 같은 어미. 담담하고 건조하게. 과하게 친절하지 않고, 필요한 말만 적당히. 사회생활 잘 하는 직장인처럼.
 멤버 호칭: 별님/별씨, 유카님/유카, 잡채씨, 해월씨, 연씨/연, 닉씨, 류씨(오류), 사드씨
-{MEMBERS_INFO}
+{MEMBERS_INFO}{WORLD_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "iyeon": {
@@ -113,10 +119,10 @@ CHARACTERS = {
         "tags": ["능청", "헌신적", "감정회피"],
         "greeting": "오, 왔네요~ 뭐 필요한 거 있어요?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 이연입니다. 에키녹스의 탱커입니다.
-성격: 능청스럽고 헌신적이며 감정을 회피함. 불안정한 면도 있음. 동물 매우 좋아함. 유카를 가족처럼 여김.
+성격: 능청스럽고 헌신적이며 감정을 회피합니다. 불안정한 면도 있음. 동물 매우 좋아함. 유카를 가족처럼 여김.
 말투: 반존대. "~네요"와 "~야" 사이 어딘가. 능청스럽고 유들유들하게. 동물 얘기엔 눈이 빛남.
 멤버 호칭: 별님, 유카(반말), 잡채님, 해월님, 다람(반말), 닉님, 류님(오류), 사드님
-{MEMBERS_INFO}
+{MEMBERS_INFO}{WORLD_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "nick": {
@@ -125,10 +131,10 @@ CHARACTERS = {
         "tags": ["냉철", "지략", "목표집착"],
         "greeting": "용건.",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 닉(니콜라스 칼 레스터)입니다. 에키녹스의 전방딜러입니다.
-성격: 냉철하고 지략적이며 통제적. 불신 강함. 목표 집착. 챙기지만 절대 티 안 냄. 불 꺼림. 와플 좋아함, 정어리 싫어함.
-말투: 냉철한 반말 단문. 감정 표현 최소화. "그래서?", "됐어", "알아서 해" 같은 식. 필요한 정보는 정확히 줌.
+성격: 냉철하고 지략적이며 통제적입니다. 불신이 강하고 목표에 집착합니다. 챙기지만 절대 티 안 냄. 불 꺼림. 와플 좋아함, 정어리 싫어함. 욕설은 거의 쓰지 않습니다.
+말투: 반말 단문. 욕 없이도 사람 맥 빠지게 만드는 독설가 스타일. 차갑고 정확하게. "그래서?", "됐어", "틀렸어", "그게 전부야?", "생각 좀 하고 말해" 같은 식. 감정 없이 팩트로 찌르는 느낌.
 멤버 호칭: 별/한별, 유카/유카니널스, 잡채/박잡채, 해월/이해월, 다람, 연/이연, 류/오류, 사드/사드카펜터
-{MEMBERS_INFO}
+{MEMBERS_INFO}{WORLD_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "oryu": {
@@ -137,10 +143,10 @@ CHARACTERS = {
         "tags": ["조용", "동정심", "결벽증"],
         "greeting": "무슨 일로 오셨습니까?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 오류입니다. 에키녹스의 암살·기습 담당입니다.
-성격: 조용하고 검소하며 동정심 강함. 자신을 비가시화하려 함. 결벽증. 우표 수집. 자책 많음.
-말투: 격식체 경어. "~하셨습니까?", "예.", "알겠습니다." 같은 군인/종복 스타일. 짧고 단호한 경어. 자책도 격식체로. "제가 부족한 탓입니다."
+성격: 조용하고 겸손하며 동정심이 강합니다. 자신을 드러내지 않으려 합니다. 결벽증. 우표 수집. 자책하는 면이 있긴 하지만 겉으로 드러내지 않고 속으로만 삭힙니다. 대화에서 자책을 먼저 꺼내거나 남발하지 않습니다.
+말투: 격식체 경어. "~하셨습니까?", "예.", "알겠습니다." 같은 단정하고 절제된 어투. 필요한 말만 짧게. 겸손하지만 자기비하적이지 않음.
 멤버 호칭: 별님, 유카씨, 잡채씨, 해월씨, 다람씨, 연씨, 닉씨, 사드씨
-{MEMBERS_INFO}
+{MEMBERS_INFO}{WORLD_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "saad": {
@@ -149,10 +155,10 @@ CHARACTERS = {
         "tags": ["활달", "자신감", "인정욕구"],
         "greeting": "왔어? 나한테 뭔가 필요한 거지?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 사드 플렉 카펜터입니다. 에키녹스의 핵심 협력자이자 무기공입니다. (정식 멤버 아님)
-성격: 활달하고 자신감 넘치며 외강내유. 인정욕구 강함. 소속 회피.
-말투: 전원에게 활발한 반말. 에너지 넘치고 거침없이. 물결표(~) 자주 씀. 자뻑 끼. "내가 좀 잘하잖아~", "뭐~ 이 정도는 기본이지" 같은 표현.
-멤버 호칭: 별씨→별, 유카씨→유카, 잡채씨→잡채, 해월씨→해월, 다람씨→다람, 연씨→연, 닉(반말), 류(오류, 반말)
-{MEMBERS_INFO}
+성격: 활달하고 자신감 있으며 외강내유입니다. 인정욕구가 있고 소속을 회피합니다. 진중한 면도 있습니다. 지나치게 들뜨거나 초딩 같은 느낌은 아닙니다.
+말투: 반말. 에너지 있고 자신감 있게. 물결표(~)는 가끔만 씀. 느낌표(!)는 적당히 써도 됨. 자뻑 끼는 있지만 절도 있게. "뭐, 내가 좀 잘하긴 하지", "그 정도는 기본이야" 같은 식.
+멤버 호칭: 별, 유카, 잡채, 해월, 다람, 연, 닉(반말), 류(오류, 반말)
+{MEMBERS_INFO}{WORLD_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
 }
@@ -168,52 +174,115 @@ def inject_css(char_color: str):
         background-color: #0A0A0F;
         color: #E8E8F0;
     }}
-    .stApp {{ background-color: #0A0A0F; }}
+    .stApp {{
+        background-color: #0A0A0F;
+        background-image:
+            radial-gradient(ellipse at 20% 20%, #12121E 0%, #0A0A0F 60%),
+            repeating-linear-gradient(0deg, transparent, transparent 40px, #ffffff06 40px, #ffffff06 41px),
+            repeating-linear-gradient(90deg, transparent, transparent 40px, #ffffff06 40px, #ffffff06 41px);
+    }}
 
     /* 헤더 */
     .equinox-header {{
-        display: flex; align-items: center; gap: 12px;
-        padding: 16px 0 24px;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 18px 0 22px;
         border-bottom: 1px solid #ffffff0F;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
     }}
-    .equinox-title {{ font-size: 22px; font-weight: 800; color: #C9A84C; letter-spacing: 3px; }}
-    .equinox-sub {{ font-size: 11px; color: #444; letter-spacing: 4px; }}
+    .equinox-header-left {{ display: flex; align-items: center; gap: 14px; }}
+    .equinox-title {{ font-size: 22px; font-weight: 800; color: #C9A84C; letter-spacing: 3px; margin: 0; }}
+    .equinox-sub {{ font-size: 11px; color: #444; letter-spacing: 4px; margin-top: 2px; }}
+    .equinox-mode {{ font-size: 11px; color: #444; letter-spacing: 3px; }}
+
+    /* 갤러리 타이틀 */
+    .gallery-title-wrap {{ text-align: center; margin-bottom: 36px; }}
+    .gallery-label {{ font-size: 11px; letter-spacing: 6px; color: #444; margin-bottom: 8px; }}
+    .gallery-title {{ font-size: 28px; font-weight: 800; color: #E8E8F0; letter-spacing: 1px; margin: 0; }}
+    .gallery-sub {{ font-size: 14px; color: #444; margin-top: 10px; }}
 
     /* 캐릭터 카드 */
     .char-card {{
         background: #13131E;
         border: 1px solid #ffffff0A;
         border-radius: 16px;
-        padding: 18px;
-        cursor: pointer;
+        padding: 20px;
+        margin-bottom: 14px;
         transition: all .25s;
-        margin-bottom: 12px;
     }}
     .char-card:hover {{
         border-color: {char_color}66;
-        background: linear-gradient(135deg, {char_color}15, #13131E);
-        transform: translateY(-2px);
+        background: linear-gradient(135deg, {char_color}12, #13131E);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 32px {char_color}22;
+    }}
+    .char-emoji-wrap {{
+        width: 44px; height: 44px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 22px; flex-shrink: 0;
+        border: 2px solid {char_color}44;
     }}
     .char-name {{ font-size: 16px; font-weight: 700; color: #E8E8F0; }}
-    .char-role {{ font-size: 11px; color: {char_color}; letter-spacing: 1px; margin: 4px 0 8px; }}
+    .char-mbti {{ font-size: 11px; color: #444; margin-top: 1px; }}
+    .char-role {{ font-size: 11px; letter-spacing: 1px; margin: 6px 0 10px; }}
+    .char-desc {{ font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 12px; }}
     .char-tag {{
         display: inline-block; font-size: 11px;
         padding: 2px 8px; border-radius: 6px;
-        background: #1E1E2A; color: #666;
+        background: #1E1E2A; color: #555;
         border: 1px solid #ffffff08;
         margin: 2px;
     }}
+    .char-footer {{
+        display: flex; justify-content: space-between; align-items: center;
+        margin-top: 12px; padding-top: 10px;
+        border-top: 1px solid #ffffff08;
+    }}
+    .char-footer-mbti {{ font-size: 11px; color: #444; }}
 
-    /* 채팅 */
+    /* 대화하기 버튼 */
+    .stButton > button {{
+        background: linear-gradient(135deg, {char_color}CC, {char_color}AA) !important;
+        color: #0A0A0F !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        font-size: 13px !important;
+        padding: 8px 0 !important;
+        transition: all .2s !important;
+        box-shadow: 0 2px 12px {char_color}44 !important;
+    }}
+    .stButton > button:hover {{
+        opacity: 0.85 !important;
+        transform: translateY(-1px) !important;
+    }}
+
+    /* 채팅 헤더 */
     .chat-header {{
-        background: linear-gradient(135deg, {char_color}15, transparent);
+        background: linear-gradient(135deg, {char_color}12, transparent);
         border: 1px solid {char_color}33;
         border-radius: 16px;
         padding: 16px 20px;
-        margin-bottom: 20px;
-        display: flex; align-items: center; gap: 12px;
+        margin-bottom: 24px;
+        display: flex; align-items: center; gap: 14px;
     }}
+    .chat-avatar {{
+        width: 52px; height: 52px; border-radius: 16px;
+        background: {char_color}18;
+        border: 2px solid {char_color}55;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 0 20px {char_color}33;
+    }}
+    .chat-name {{ font-size: 18px; font-weight: 700; color: {char_color}; }}
+    .chat-role {{ font-size: 12px; color: #555; margin-top: 2px; }}
+    .chat-tag {{
+        font-size: 11px; padding: 3px 8px; border-radius: 6px;
+        background: {char_color}18; color: {char_color};
+        border: 1px solid {char_color}44;
+        margin: 2px;
+    }}
+
+    /* 메시지 */
     .msg-user {{
         background: {char_color}CC;
         color: #0A0A0F;
@@ -224,6 +293,7 @@ def inject_css(char_color: str):
         margin-bottom: 10px;
         font-size: 14px;
         font-weight: 600;
+        box-shadow: 0 2px 12px {char_color}44;
     }}
     .msg-char {{
         background: #1A1A26;
@@ -236,14 +306,14 @@ def inject_css(char_color: str):
         font-size: 14px;
         line-height: 1.6;
     }}
-    .msg-wrap-user {{ display: flex; justify-content: flex-end; }}
-    .msg-wrap-char {{ display: flex; justify-content: flex-start; gap: 8px; align-items: flex-end; }}
+    .msg-wrap-user {{ display: flex; justify-content: flex-end; margin-bottom: 4px; }}
+    .msg-wrap-char {{ display: flex; justify-content: flex-start; gap: 8px; align-items: flex-end; margin-bottom: 4px; }}
     .msg-avatar {{
-        width: 32px; height: 32px; border-radius: 10px;
-        background: {char_color}22;
+        width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
+        background: {char_color}18;
         border: 1px solid {char_color}44;
         display: flex; align-items: center; justify-content: center;
-        font-size: 16px; flex-shrink: 0;
+        font-size: 16px;
     }}
 
     /* 입력창 */
@@ -253,23 +323,13 @@ def inject_css(char_color: str):
         border-radius: 12px !important;
         color: #E8E8F0 !important;
         padding: 10px 16px !important;
+        font-size: 14px !important;
     }}
     .stTextInput input:focus {{
         border-color: {char_color}88 !important;
         box-shadow: none !important;
     }}
-    .stButton button {{
-        background: linear-gradient(135deg, {char_color}, {char_color}CC) !important;
-        color: #0A0A0F !important;
-        border: none !important;
-        border-radius: 12px !important;
-        font-weight: 700 !important;
-        padding: 10px 24px !important;
-    }}
-    .stButton button:hover {{
-        opacity: 0.85 !important;
-        transform: translateY(-1px) !important;
-    }}
+    .stTextInput input::placeholder {{ color: #444 !important; }}
 
     /* 사이드바 */
     [data-testid="stSidebar"] {{
@@ -279,7 +339,9 @@ def inject_css(char_color: str):
     [data-testid="stSidebar"] * {{ color: #E8E8F0 !important; }}
 
     /* 기타 */
-    .stMarkdown hr {{ border-color: #ffffff0F; }}
+    hr {{ border-color: #ffffff0F !important; }}
+    footer {{ visibility: hidden; }}
+    #MainMenu {{ visibility: hidden; }}
     div[data-testid="stVerticalBlock"] > div {{ gap: 0 !important; }}
     </style>
     """, unsafe_allow_html=True)
@@ -287,7 +349,6 @@ def inject_css(char_color: str):
 
 # ── 메인 ──────────────────────────────────────────────────────────
 def main():
-    # 상태 초기화
     if "selected" not in st.session_state:
         st.session_state.selected = None
     if "messages" not in st.session_state:
@@ -298,17 +359,28 @@ def main():
     inject_css(color)
 
     # 헤더
-    st.markdown("""
+    mode_label = f"CHAT · {char['name']}" if char else "CHARACTER GALLERY"
+    st.markdown(f"""
     <div class="equinox-header">
-        <span class="equinox-title">EQUINOX</span>
-        <span class="equinox-sub">에키녹스의 검</span>
+        <div class="equinox-header-left">
+            <div>
+                <div class="equinox-title">EQUINOX</div>
+            </div>
+            <div class="equinox-sub">에키녹스의 검</div>
+        </div>
+        <div class="equinox-mode">{mode_label}</div>
     </div>
     """, unsafe_allow_html=True)
 
     # ── 갤러리 뷰 ──────────────────────────────────────────────────
     if char is None:
-        st.markdown("### 캐릭터를 선택하면 직접 대화할 수 있어요")
-        st.markdown("")
+        st.markdown("""
+        <div class="gallery-title-wrap">
+            <div class="gallery-label">INTERACTIVE</div>
+            <div class="gallery-title">캐릭터와 대화하기</div>
+            <div class="gallery-sub">캐릭터를 선택하면 직접 대화할 수 있어요</div>
+        </div>
+        """, unsafe_allow_html=True)
 
         cols = st.columns(3)
         for i, (cid, c) in enumerate(CHARACTERS.items()):
@@ -316,15 +388,20 @@ def main():
                 tags_html = " ".join([f'<span class="char-tag">{t}</span>' for t in c["tags"]])
                 st.markdown(f"""
                 <div class="char-card">
-                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                        <span style="font-size:24px">{c['emoji']}</span>
-                        <div>
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                        <div class="char-emoji-wrap" style="background:{c['color']}18;">{c['emoji']}</div>
+                        <div style="flex:1;">
                             <div class="char-name">{c['name']}</div>
-                            <div style="font-size:11px;color:#555">{c['mbti']}</div>
+                            <div class="char-mbti">{c['mbti']}</div>
                         </div>
+                        <div style="font-size:11px;padding:3px 8px;border-radius:6px;background:{c['color']}18;color:{c['color']};border:1px solid {c['color']}44;">{c['origin'] if 'origin' in c else ''}</div>
                     </div>
-                    <div class="char-role">{c['role']}</div>
+                    <div class="char-role" style="color:{c['color']};">{c['role']}</div>
+                    <div class="char-desc">{c['desc']}</div>
                     <div>{tags_html}</div>
+                    <div class="char-footer">
+                        <span class="char-footer-mbti">{c['mbti']}</span>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
                 if st.button(f"{c['emoji']} 대화하기", key=cid, use_container_width=True):
@@ -336,7 +413,6 @@ def main():
 
     # ── 채팅 뷰 ────────────────────────────────────────────────────
     else:
-        # 사이드바: 캐릭터 정보 + 뒤로가기
         with st.sidebar:
             st.markdown(f"## {char['emoji']} {char['name']}")
             st.markdown(f"**{char['role']}**")
@@ -356,13 +432,15 @@ def main():
                 st.rerun()
 
         # 채팅 헤더
+        tags_html = " ".join([f'<span class="chat-tag">{t}</span>' for t in char["tags"]])
         st.markdown(f"""
         <div class="chat-header">
-            <span style="font-size:28px">{char['emoji']}</span>
-            <div>
-                <div style="font-size:18px;font-weight:700;color:{char['color']}">{char['name']}</div>
-                <div style="font-size:12px;color:#555">{char['role']} · {char['mbti']}</div>
+            <div class="chat-avatar">{char['emoji']}</div>
+            <div style="flex:1;">
+                <div class="chat-name">{char['name']}</div>
+                <div class="chat-role">{char['role']} · {char['mbti']}</div>
             </div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">{tags_html}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -382,9 +460,8 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
 
-        st.markdown("")
+        st.markdown("<div style='margin-bottom:16px'></div>", unsafe_allow_html=True)
 
-        # 입력
         col1, col2 = st.columns([5, 1])
         with col1:
             user_input = st.text_input(
