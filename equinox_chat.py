@@ -1,3 +1,11 @@
+# 임시 디버그용 - 확인 후 삭제
+import subprocess
+result = subprocess.run(
+    ["pip", "show", "google-cloud-aiplatform"],
+    capture_output=True, text=True
+)
+st.code(result.stdout)
+
 import json
 import tempfile
 import os
