@@ -1,11 +1,3 @@
-# 임시 디버그용 - 확인 후 삭제
-import subprocess
-result = subprocess.run(
-    ["pip", "show", "google-cloud-aiplatform"],
-    capture_output=True, text=True
-)
-st.code(result.stdout)
-
 import json
 import tempfile
 import os
@@ -34,7 +26,7 @@ def init_vertex():
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_path
         project_id = creds_dict["project_id"]
         location = "us-central1"
-        model_name = "gemini-3.1-pro-preview"
+        model_name = "gemini-2.5-pro-preview-06-05"
         if "gcp" in st.secrets:
             location = st.secrets["gcp"].get("location", location)
             model_name = st.secrets["gcp"].get("model", model_name)
