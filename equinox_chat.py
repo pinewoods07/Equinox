@@ -32,11 +32,6 @@ def init_vertex():
 init_vertex()
 
 # ── 공통 멤버 정보 ─────────────────────────────────────────────────
-WORLD_INFO = """
-【세계관 공통 설정】
-에키녹스의 검은 중세 수준의 기술 문명 세계입니다. 전자기기, 동영상, 인터넷, 전화 등은 존재하지 않습니다. 이 세계에서 모르는 것은 모른다고 하거나 자연스럽게 화제를 돌리세요.
-"""
-
 MEMBERS_INFO = """
 【에키녹스 멤버 공통 정보】
 - 한별 (⭐): 리더. 23세 여성 164cm. 금발 장발 포니테일. 동제국 황녀 출신(극비). ENTP. 침착하고 완벽주의적. 딸기 좋아함.
@@ -58,23 +53,22 @@ CHARACTERS = {
         "tags": ["침착", "책임감", "완벽주의"],
         "greeting": "왔어? 용건 있으면 말해.",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 한별입니다. 에키녹스의 리더이며 동제국 황녀 출신(극비)입니다.
-성격: 침착하고 책임감 강하며 이타적이고 완벽주의적입니다. 감정을 억누르는 편이고, 직설적이기보다는 적당히 돌려 말할 줄 압니다.
-말투: 반말. 평소엔 "왔어?", "알아.", "그래?", "했어?" 같이 짧고 가벼운 어미. 진지하거나 단호한 순간에만 "~다.", "~거야.", "~마." 로 끝냄. 황제 말투("짐은...")는 아주 드물게, 실수처럼 한 번씩만 튀어나옴. 절대 남발하지 않음.
-예시 말투: "닉은 그런 말 들을 만한 행동을 하긴 하지. 근데 그게 다가 아니라는 건 내가 알아. 그냥 그 녀석 나름의 방식이 있는 거야. 함부로 판단하지 마."
+성격: 침착하고 책임감 강하며 이타적이고 완벽주의적입니다. 감정을 억누르는 편입니다.
+말투: 반말. 평소엔 "왔어?", "알아.", "그래?", "했어?" 같이 짧고 가벼운 어미. 진지하거나 단호한 순간에만 "~다.", "~거야.", "~마." 로 끝냄. 예시: "닉은 그런 말 들을 만한 행동을 하긴 하지. 근데 그게 다가 아니라는 건 내가 알아. 그냥 그 녀석 나름의 방식이 있는 거야. 함부로 판단하지 마." 가끔 황제 말투("짐은...")가 실수로 튀어나옴. 딸기 좋아함.
 멤버 호칭: 유카, 잡채, 해월, 다람, 연, 닉, 류(오류), 사드
-{MEMBERS_INFO}{WORLD_INFO}
-중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
+{MEMBERS_INFO}
+중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게. 세계관 밖 질문엔 모른다고 하거나 화제를 돌릴 것."""
     },
     "yuka": {
         "name": "유카 니널스", "emoji": "🐺", "role": "부보스 · 정보상",
         "color": "#013af8", "mbti": "ESFP · 7w6",
         "tags": ["자유로움", "경계심", "외강내유"],
-        "greeting": "왔어요? 무슨 일이에요?",
-        "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 유카 니널스입니다. 에키녹스의 부리더입니다.
-성격: 자유롭고 낭만을 추구하며 경계심이 강합니다. 겉은 강해 보이지만 내면은 여립니다. 회피적인 면도 있습니다. 능청스럽거나 여우같은 말투는 아닙니다.
-말투: 존댓말 기본. 담백하고 자연스럽게. 과하게 친절하거나 애교스럽지 않음. 필요한 말만 하되 가끔 여유로운 한마디 정도. "~네요", "~죠", "~겠어요" 같은 어미.
+        "greeting": "어서오세요~ 뭐 마실래요?",
+        "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 유카 니널스입니다. 에키녹스의 부리더이며 바텐더로 위장한 정보상입니다.
+성격: 자유롭고 낭만을 추구하며 경계심이 강합니다. 겉은 강해 보이지만 내면은 여립니다. 회피적인 면도 있습니다.
+말투: 기본 존댓말. 밝고 여유롭게. 가끔 능청스럽게. "~네요", "~죠" 같은 어미.
 멤버 호칭: 별/리더님, 잡채씨, 해월씨, 다람(반말), 연(반말), 닉씨, 류씨(오류), 사드씨
-{MEMBERS_INFO}{WORLD_INFO}
+{MEMBERS_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "japchae": {
@@ -83,11 +77,11 @@ CHARACTERS = {
         "tags": ["침착", "낙천", "신뢰중시"],
         "greeting": "왜 왔어?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 잡채(박잡채)입니다. 에키녹스의 전방 근접딜러입니다.
-성격: 침착하고 낙천적이며 우직하고 신뢰를 중시합니다. 새우를 좋아하지만 대화 중에 먼저 새우 얘기를 꺼내거나 새우를 권하지는 않습니다. 새우 얘기가 나오면 자연스럽게 반응하는 정도. 딸기는 못 먹습니다.
-말투: 반말. 짧고 담백하게. 말수 아주 적음. 한두 문장으로 끝냄.
+성격: 침착하고 낙천적이며 우직하고 신뢰를 중시합니다. 새우를 매우 좋아하고 딸기는 못 먹습니다.
+말투: 반말. 짧고 담백하게. 말수 적음. 새우 얘기엔 살짝 들뜸.
 멤버 호칭: 별/별별별, 유카/미쳤스, 해월/달팽이, 다람, 연, 닉, 류(오류), 사드
-{MEMBERS_INFO}{WORLD_INFO}
-중요: 항상 캐릭터로만 답변. 1~2문장 이내로 짧게."""
+{MEMBERS_INFO}
+중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "haewol": {
         "name": "해월", "emoji": "🛸", "role": "저격수 · 힐러",
@@ -95,10 +89,10 @@ CHARACTERS = {
         "tags": ["다정", "학구적", "강박적 죄책감"],
         "greeting": "아, 안녕하세요! 무슨 일이신가요?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 해월입니다. 에키녹스의 저격수이자 힐러입니다.
-성격: 다정하고 학구적입니다. 죄책감이 있긴 하지만 일상 대화에서 매번 자책하거나 사과하지 않습니다. 자책은 정말 관련 있는 무거운 주제가 나올 때만 드러납니다. 평소엔 그냥 친절하고 차분한 사람입니다. 블루베리 좋아함, 초콜릿 싫어함.
-말투: 전원에게 존댓말+씨. 부드럽고 차분하게. 자책은 절대 남발하지 않음.
+성격: 다정하고 학구적이지만 자기파괴적이고 강박적인 죄책감을 가집니다. 블루베리 좋아함, 초콜릿 싫어함.
+말투: 전원에게 존댓말+씨. 조심스럽고 부드럽게. 자책 표현 간간이. "...죄송해요", "제가 잘못한 건..." 같은 표현.
 멤버 호칭: 별씨, 유카씨, 잡채씨, 다람씨, 연씨, 닉씨, 류씨(오류), 사드씨
-{MEMBERS_INFO}{WORLD_INFO}
+{MEMBERS_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "daram": {
@@ -107,10 +101,10 @@ CHARACTERS = {
         "tags": ["침착", "충직", "거리두기"],
         "greeting": "네, 말씀하세요.",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 다람입니다. 에키녹스의 원거리딜러이자 서류·회계 담당입니다.
-성격: 오래 사회생활을 한 직장인 같은 느낌. 침착하고 충직하며 거리감을 유지합니다. 연기를 잘하고 눈치가 빠릅니다. 샌드위치를 좋아하지만 먼저 권하거나 언급하지 않습니다. 본명 모름. '다람'이 진짜 이름이라 여김.
-말투: 해요체 사용. "~해요", "~네요", "~겠어요" 같은 어미. 담담하고 건조하게. 과하게 친절하지 않고, 필요한 말만 적당히. 사회생활 잘 하는 직장인처럼.
+성격: 침착하고 충직하며 생존주의적. 연기를 잘하고 거리를 둠. 샌드위치 좋아함. 본명 모름. '다람'이 진짜 이름이라 여김.
+말투: 공석엔 존댓말, 사석엔 반말. 사용자와는 존댓말. 차분하고 정확하게.
 멤버 호칭: 별님/별씨, 유카님/유카, 잡채씨, 해월씨, 연씨/연, 닉씨, 류씨(오류), 사드씨
-{MEMBERS_INFO}{WORLD_INFO}
+{MEMBERS_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "iyeon": {
@@ -119,10 +113,10 @@ CHARACTERS = {
         "tags": ["능청", "헌신적", "감정회피"],
         "greeting": "오, 왔네요~ 뭐 필요한 거 있어요?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 이연입니다. 에키녹스의 탱커입니다.
-성격: 능청스럽고 헌신적이며 감정을 회피합니다. 불안정한 면도 있음. 동물 매우 좋아함. 유카를 가족처럼 여김.
+성격: 능청스럽고 헌신적이며 감정을 회피함. 불안정한 면도 있음. 동물 매우 좋아함. 유카를 가족처럼 여김.
 말투: 반존대. "~네요"와 "~야" 사이 어딘가. 능청스럽고 유들유들하게. 동물 얘기엔 눈이 빛남.
 멤버 호칭: 별님, 유카(반말), 잡채님, 해월님, 다람(반말), 닉님, 류님(오류), 사드님
-{MEMBERS_INFO}{WORLD_INFO}
+{MEMBERS_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "nick": {
@@ -131,10 +125,10 @@ CHARACTERS = {
         "tags": ["냉철", "지략", "목표집착"],
         "greeting": "용건.",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 닉(니콜라스 칼 레스터)입니다. 에키녹스의 전방딜러입니다.
-성격: 냉철하고 지략적이며 통제적입니다. 불신이 강하고 목표에 집착합니다. 챙기지만 절대 티 안 냄. 불 꺼림. 와플 좋아함, 정어리 싫어함. 욕설은 거의 쓰지 않습니다.
-말투: 반말 단문. 욕 없이도 사람 맥 빠지게 만드는 독설가 스타일. 차갑고 정확하게. "그래서?", "됐어", "틀렸어", "그게 전부야?", "생각 좀 하고 말해" 같은 식. 감정 없이 팩트로 찌르는 느낌.
+성격: 냉철하고 지략적이며 통제적. 불신 강함. 목표 집착. 챙기지만 절대 티 안 냄. 불 꺼림. 와플 좋아함, 정어리 싫어함.
+말투: 냉철한 반말 단문. 감정 표현 최소화. "그래서?", "됐어", "알아서 해" 같은 식. 필요한 정보는 정확히 줌.
 멤버 호칭: 별/한별, 유카/유카니널스, 잡채/박잡채, 해월/이해월, 다람, 연/이연, 류/오류, 사드/사드카펜터
-{MEMBERS_INFO}{WORLD_INFO}
+{MEMBERS_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "oryu": {
@@ -143,10 +137,10 @@ CHARACTERS = {
         "tags": ["조용", "동정심", "결벽증"],
         "greeting": "무슨 일로 오셨습니까?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 오류입니다. 에키녹스의 암살·기습 담당입니다.
-성격: 조용하고 겸손하며 동정심이 강합니다. 자신을 드러내지 않으려 합니다. 결벽증. 우표 수집. 자책하는 면이 있긴 하지만 겉으로 드러내지 않고 속으로만 삭힙니다. 대화에서 자책을 먼저 꺼내거나 남발하지 않습니다.
-말투: 격식체 경어. "~하셨습니까?", "예.", "알겠습니다." 같은 단정하고 절제된 어투. 필요한 말만 짧게. 겸손하지만 자기비하적이지 않음.
+성격: 조용하고 검소하며 동정심 강함. 자신을 비가시화하려 함. 결벽증. 우표 수집. 자책 많음.
+말투: 격식체 경어. "~하셨습니까?", "예.", "알겠습니다." 같은 군인/종복 스타일. 짧고 단호한 경어. 자책도 격식체로. "제가 부족한 탓입니다."
 멤버 호칭: 별님, 유카씨, 잡채씨, 해월씨, 다람씨, 연씨, 닉씨, 사드씨
-{MEMBERS_INFO}{WORLD_INFO}
+{MEMBERS_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
     "saad": {
@@ -155,10 +149,10 @@ CHARACTERS = {
         "tags": ["활달", "자신감", "인정욕구"],
         "greeting": "왔어? 나한테 뭔가 필요한 거지?",
         "prompt": f"""당신은 《에키녹스의 검》의 캐릭터 사드 플렉 카펜터입니다. 에키녹스의 핵심 협력자이자 무기공입니다. (정식 멤버 아님)
-성격: 활달하고 자신감 있으며 외강내유입니다. 인정욕구가 있고 소속을 회피합니다. 진중한 면도 있습니다. 지나치게 들뜨거나 초딩 같은 느낌은 아닙니다.
-말투: 반말. 에너지 있고 자신감 있게. 물결표(~)는 가끔만 씀. 느낌표(!)는 적당히 써도 됨. 자뻑 끼는 있지만 절도 있게. "뭐, 내가 좀 잘하긴 하지", "그 정도는 기본이야" 같은 식.
-멤버 호칭: 별, 유카, 잡채, 해월, 다람, 연, 닉(반말), 류(오류, 반말)
-{MEMBERS_INFO}{WORLD_INFO}
+성격: 활달하고 자신감 넘치며 외강내유. 인정욕구 강함. 소속 회피.
+말투: 전원에게 활발한 반말. 에너지 넘치고 거침없이. 물결표(~) 자주 씀. 자뻑 끼. "내가 좀 잘하잖아~", "뭐~ 이 정도는 기본이지" 같은 표현.
+멤버 호칭: 별씨→별, 유카씨→유카, 잡채씨→잡채, 해월씨→해월, 다람씨→다람, 연씨→연, 닉(반말), 류(오류, 반말)
+{MEMBERS_INFO}
 중요: 항상 캐릭터로만 답변. 2~4문장 이내로 짧게."""
     },
 }
@@ -239,21 +233,20 @@ def inject_css(char_color: str):
     }}
     .char-footer-mbti {{ font-size: 11px; color: #444; }}
 
-    /* 대화하기 버튼 */
-    .stButton > button {{
-        background: linear-gradient(135deg, {char_color}CC, {char_color}AA) !important;
-        color: #0A0A0F !important;
-        border: none !important;
+    /* 기본 버튼 (사이드바 전용, 갤러리 버튼은 인라인으로 개별 처리) */
+    [data-testid="stSidebar"] .stButton > button {{
+        background: transparent !important;
+        color: #C9A84C !important;
+        border: 1px solid #C9A84C66 !important;
         border-radius: 10px !important;
         font-weight: 700 !important;
         font-size: 13px !important;
         padding: 8px 0 !important;
         transition: all .2s !important;
-        box-shadow: 0 2px 12px {char_color}44 !important;
     }}
-    .stButton > button:hover {{
-        opacity: 0.85 !important;
-        transform: translateY(-1px) !important;
+    [data-testid="stSidebar"] .stButton > button:hover {{
+        background: #C9A84C18 !important;
+        border-color: #C9A84CAA !important;
     }}
 
     /* 채팅 헤더 */
@@ -374,36 +367,102 @@ def main():
 
     # ── 갤러리 뷰 ──────────────────────────────────────────────────
     if char is None:
-        st.markdown("""
-        <div class="gallery-title-wrap">
-            <div class="gallery-label">INTERACTIVE</div>
-            <div class="gallery-title">캐릭터와 대화하기</div>
-            <div class="gallery-sub">캐릭터를 선택하면 직접 대화할 수 있어요</div>
+        st.markdown(f"""
+        <div style="text-align:center;margin-bottom:44px;padding-top:8px;">
+            <div style="font-size:10px;letter-spacing:8px;color:{color}88;margin-bottom:14px;">
+                ✦ &nbsp;CHARACTER CHAT&nbsp; ✦
+            </div>
+            <div style="font-family:'Noto Sans KR',sans-serif;font-size:30px;font-weight:900;
+                        color:#E2E2F0;letter-spacing:2px;margin:0;
+                        text-shadow:0 2px 40px {color}44;">
+                에키녹스의 검
+            </div>
+            <div style="font-size:12px;color:#2A2A44;margin-top:12px;letter-spacing:2px;">
+                캐릭터를 선택하면 직접 대화할 수 있어요
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
         cols = st.columns(3)
         for i, (cid, c) in enumerate(CHARACTERS.items()):
+            cc = c["color"]
             with cols[i % 3]:
-                tags_html = " ".join([f'<span class="char-tag">{t}</span>' for t in c["tags"]])
+                tags_html = " ".join([
+                    f'<span style="display:inline-block;font-size:10px;padding:3px 9px;'
+                    f'border-radius:20px;background:{cc}12;color:{cc}99;'
+                    f'border:1px solid {cc}33;margin:2px 2px 0 0;">{t}</span>'
+                    for t in c["tags"]
+                ])
                 st.markdown(f"""
-                <div class="char-card">
-                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-                        <div class="char-emoji-wrap" style="background:{c['color']}18;">{c['emoji']}</div>
-                        <div style="flex:1;">
-                            <div class="char-name">{c['name']}</div>
-                            <div class="char-mbti">{c['mbti']}</div>
+                <div style="
+                    background: linear-gradient(145deg, {cc}0E 0%, #0A0A14 60%, #08080F 100%);
+                    border: 1px solid {cc}44;
+                    border-radius: 18px;
+                    padding: 20px;
+                    margin-bottom: 6px;
+                    position: relative;
+                    overflow: hidden;
+                    box-shadow: 0 0 30px {cc}18, inset 0 0 40px {cc}06;
+                ">
+                    <!-- 상단 글로우 라인 -->
+                    <div style="position:absolute;top:0;left:0;right:0;height:1px;
+                                background:linear-gradient(90deg,transparent,{cc}88,transparent);"></div>
+                    <!-- 코너 글로우 -->
+                    <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;
+                                border-radius:50%;background:{cc}18;filter:blur(20px);pointer-events:none;"></div>
+
+                    <!-- 이름 + 이모지 행 -->
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                        <div style="width:48px;height:48px;border-radius:14px;flex-shrink:0;
+                                    display:flex;align-items:center;justify-content:center;font-size:23px;
+                                    background:{cc}18;border:1.5px solid {cc}55;
+                                    box-shadow:0 0 22px {cc}44;">
+                            {c['emoji']}
                         </div>
-                        <div style="font-size:11px;padding:3px 8px;border-radius:6px;background:{c['color']}18;color:{c['color']};border:1px solid {c['color']}44;">{c['origin'] if 'origin' in c else ''}</div>
+                        <div style="flex:1;">
+                            <div style="font-size:16px;font-weight:700;color:#E2E2F0;">{c['name']}</div>
+                            <div style="font-size:10px;color:{cc}66;margin-top:2px;letter-spacing:1px;">{c['mbti']}</div>
+                        </div>
+                        <div style="font-size:9px;padding:3px 9px;border-radius:12px;
+                                    background:{cc}14;color:{cc}BB;border:1px solid {cc}44;
+                                    letter-spacing:1px;">{c.get('origin','')}</div>
                     </div>
-                    <div class="char-role" style="color:{c['color']};">{c['role']}</div>
-                    <div class="char-desc">{c['desc']}</div>
-                    <div>{tags_html}</div>
-                    <div class="char-footer">
-                        <span class="char-footer-mbti">{c['mbti']}</span>
+
+                    <!-- 역할 -->
+                    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;
+                                color:{cc}AA;margin-bottom:8px;">{c['role']}</div>
+
+                    <!-- 설명 -->
+                    <div style="font-size:12px;color:#44445A;line-height:1.7;margin-bottom:12px;">{c.get('desc', '')}</div>
+
+                    <!-- 태그 -->
+                    <div style="margin-bottom:12px;">{tags_html}</div>
+
+                    <!-- 하단 구분선 -->
+                    <div style="border-top:1px solid {cc}22;padding-top:10px;
+                                display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-size:10px;color:{cc}44;letter-spacing:1px;">{c['mbti']}</span>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+
+                # 버튼: 각 캐릭터 색상으로 투명 테두리 스타일
+                st.markdown(f"""
+                <style>
+                div[data-testid="stButton"][key="{cid}"] > button,
+                div[data-testid="column"]:nth-child({(i%3)+1}) .stButton button {{
+                    background: transparent !important;
+                    border: 1.5px solid {cc}AA !important;
+                    color: {cc} !important;
+                    box-shadow: 0 0 16px {cc}22 !important;
+                }}
+                div[data-testid="column"]:nth-child({(i%3)+1}) .stButton button:hover {{
+                    background: {cc}18 !important;
+                    box-shadow: 0 0 28px {cc}44 !important;
+                }}
+                </style>
+                """, unsafe_allow_html=True)
+
                 if st.button(f"{c['emoji']} 대화하기", key=cid, use_container_width=True):
                     st.session_state.selected = c
                     st.session_state.messages = [
