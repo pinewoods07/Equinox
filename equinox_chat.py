@@ -3,7 +3,12 @@ import tempfile
 import os
 import streamlit as st
 import streamlit.components.v1 as components
-from anthropic import AnthropicVertex
+
+try:
+    from anthropic import AnthropicVertex
+except ImportError:
+    st.error("❌ anthropic[vertex] 패키지가 필요합니다. requirements.txt에 `anthropic[vertex]>=0.40.0`을 추가하세요.")
+    st.stop()
 
 # ── 페이지 설정 ──────────────────────────────────────────────────
 st.set_page_config(
@@ -289,7 +294,6 @@ if char is None:
     for i, c in enumerate(CHARACTERS):
         cc = c["color"]
         with cols[i % 3]:
-            # 태그 HTML
             tags_html = "".join([
                 f'<span style="display:inline-block;font-size:10px;padding:3px 9px;'
                 f'border-radius:20px;background:{cc}18;color:{cc}BB;'
@@ -297,7 +301,6 @@ if char is None:
                 for t in c["tags"]
             ])
 
-            # components.v1.html 로 카드 렌더링 (HTML sanitize 우회)
             card = f"""<!DOCTYPE html>
 <html><head>
 <meta charset="utf-8">
@@ -348,7 +351,6 @@ body{{background:transparent;font-family:'Noto Sans KR',sans-serif;padding:4px 2
 </body></html>"""
             components.html(card, height=228, scrolling=False)
 
-            # 대화하기 버튼 (캐릭터 컬러)
             st.markdown(f"""
             <style>
             [data-testid="column"]:nth-child({(i%3)+1}) .stButton > button {{
@@ -391,7 +393,6 @@ else:
             st.session_state.messages = [{"role": "assistant", "content": char["greeting"]}]
             st.rerun()
 
-    # 채팅 헤더
     tags_html = "".join([
         f'<span class="chat-tag" style="background:{cc}18;color:{cc};border:1px solid {cc}44;">{t}</span>'
         for t in char["tags"]
@@ -413,7 +414,6 @@ else:
     </div>
     """, unsafe_allow_html=True)
 
-    # 메시지 출력
     for msg in st.session_state.messages:
         if msg["role"] == "user":
             st.markdown(f"""
