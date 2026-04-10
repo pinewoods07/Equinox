@@ -26,7 +26,8 @@ def init_vertex():
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_path
         project_id = creds_dict["project_id"]
         location = "us-central1"
-        model_name = "gemini-3.1-pro-preview"
+        model = GenerativeModel(
+                    "gemini-3.1-pro-preview",
         if "gcp" in st.secrets:
             location = st.secrets["gcp"].get("location", location)
             model_name = st.secrets["gcp"].get("model", model_name)
