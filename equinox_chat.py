@@ -18,6 +18,7 @@ st.warning("⬇️ 디버그 모드: 아래에서 설치된 패키지 버전을 
 result = subprocess.run(["pip", "show", "google-cloud-aiplatform"], capture_output=True, text=True)
 st.code(result.stdout)
 st.stop()
+
 # ── 페이지 설정 ──────────────────────────────────────────────────
 st.set_page_config(
     page_title="EQUINOX · 에키녹스의 검",
