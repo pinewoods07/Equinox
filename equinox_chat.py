@@ -13,7 +13,7 @@ st.set_page_config(
     layout="wide",
 )
 
-# ── Vertex AI 클라이언트 ──────────────────────────────────────────
+# ── Vertex AI 초기화 ──────────────────────────────────────────────
 @st.cache_resource
 def init_vertex():
     try:
@@ -26,8 +26,7 @@ def init_vertex():
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_path
         project_id = creds_dict["project_id"]
         location = "us-central1"
-        model = GenerativeModel(
-                    "gemini-3.1-pro-preview",
+        model_name = "gemini-3.1-pro-preview"
         if "gcp" in st.secrets:
             location = st.secrets["gcp"].get("location", location)
             model_name = st.secrets["gcp"].get("model", model_name)
@@ -37,28 +36,17 @@ def init_vertex():
         return None, str(e)
 
 
-def get_gemini_response(model_name: str, system_prompt: str, messages: list) -> str:
-    """Gemini 모델로 대화 응답을 생성합니다."""
+def get_gemini_response(model_name: str, system_prompt: str, messages: list, user_input: str) -> str:
     model = GenerativeModel(
         model_name,
         system_instruction=system_prompt,
     )
-    # Streamlit 메시지를 Gemini Content 형식으로 변환
-    history = []
-    for msg in messages[:-1]:  # 마지막 메시지 제외 (send_message로 보냄)
-        role = "user" if msg["role"] == "user" else "model"
-        history.append(Content(role=role, parts=[Part.from_text(msg["content"])]))
-
+    history = [
+        Content(role=m["role"], parts=[Part.from_text(m["content"])])
+        for m in messages[:-1]
+    ]
     chat = model.start_chat(history=history)
-    last_msg = messages[-1]["content"]
-    response = chat.send_message(
-        last_msg,
-        generation_config={
-            "max_output_tokens": 512,
-            "temperature": 0.85,
-            "top_p": 0.92,
-        },
-    )
+    response = chat.send_message(user_input)
     return response.text
 
 
@@ -479,6 +467,7 @@ else:
                     model_name,
                     char["system"],
                     st.session_state.messages,
+                    user_input,
                 )
             except Exception as e:
                 reply = f"...지금은 대화하기 어렵습니다. ({e})"
