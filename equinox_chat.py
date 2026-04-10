@@ -25,7 +25,7 @@ def init_vertex():
     )
     vertexai.init(
         project=sa_info["project_id"],
-        location="us-central1",
+        location="global",
         credentials=credentials,
     )
 
