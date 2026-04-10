@@ -20,36 +20,31 @@ def init_vertex():
         if "gcp_service_account" not in st.secrets:
             return None, "secrets.toml에 [gcp_service_account] 섹션이 없습니다."
         creds_dict = dict(st.secrets["gcp_service_account"])
+        
+        # 디버그: 프로젝트 ID 확인
+        st.sidebar.write("📌 project_id:", creds_dict.get("project_id", "없음"))
+        
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(creds_dict, f)
             tmp_path = f.name
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_path
+        
         project_id = creds_dict["project_id"]
         location = "us-central1"
-        model_name = "gemini-3.1-pro-preview"
+        model_name = "gemini-2.5-pro-preview-06-05"
+        
         if "gcp" in st.secrets:
             location = st.secrets["gcp"].get("location", location)
             model_name = st.secrets["gcp"].get("model", model_name)
+        
+        # 디버그: 실제 사용되는 값 확인
+        st.sidebar.write("📌 location:", location)
+        st.sidebar.write("📌 model:", model_name)
+        
         vertexai.init(project=project_id, location=location)
         return model_name, None
     except Exception as e:
         return None, str(e)
-
-
-def get_gemini_response(model_name: str, system_prompt: str, messages: list, user_input: str) -> str:
-    model = GenerativeModel(
-        model_name,
-        system_instruction=system_prompt,
-    )
-    history = [
-        Content(role=m["role"], parts=[Part.from_text(m["content"])])
-        for m in messages[:-1]
-    ]
-    chat = model.start_chat(history=history)
-    response = chat.send_message(user_input)
-    return response.text
-
-
 # ── 공통 멤버 정보 ────────────────────────────────────────────────
 MEMBERS_INFO = """
 【에키녹스 멤버 공통 정보】
