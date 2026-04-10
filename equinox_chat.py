@@ -404,14 +404,14 @@ def main():
                     overflow: hidden;
                     box-shadow: 0 0 30px {cc}18, inset 0 0 40px {cc}06;
                 ">
-                    <!-- 상단 글로우 라인 -->
+
                     <div style="position:absolute;top:0;left:0;right:0;height:1px;
                                 background:linear-gradient(90deg,transparent,{cc}88,transparent);"></div>
-                    <!-- 코너 글로우 -->
+
                     <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;
                                 border-radius:50%;background:{cc}18;filter:blur(20px);pointer-events:none;"></div>
 
-                    <!-- 이름 + 이모지 행 -->
+
                     <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
                         <div style="width:48px;height:48px;border-radius:14px;flex-shrink:0;
                                     display:flex;align-items:center;justify-content:center;font-size:23px;
@@ -428,17 +428,17 @@ def main():
                                     letter-spacing:1px;">{c.get('origin','')}</div>
                     </div>
 
-                    <!-- 역할 -->
+
                     <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;
                                 color:{cc}AA;margin-bottom:8px;">{c['role']}</div>
 
-                    <!-- 설명 -->
+
                     <div style="font-size:12px;color:#44445A;line-height:1.7;margin-bottom:12px;">{c.get('desc', '')}</div>
 
-                    <!-- 태그 -->
+
                     <div style="margin-bottom:12px;">{tags_html}</div>
 
-                    <!-- 하단 구분선 -->
+
                     <div style="border-top:1px solid {cc}22;padding-top:10px;
                                 display:flex;justify-content:space-between;align-items:center;">
                         <span style="font-size:10px;color:{cc}44;letter-spacing:1px;">{c['mbti']}</span>
