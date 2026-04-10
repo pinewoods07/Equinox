@@ -3,12 +3,8 @@ import tempfile
 import os
 import streamlit as st
 import streamlit.components.v1 as components
-
-try:
-    from anthropic import AnthropicVertex
-except ImportError:
-    st.error("❌ anthropic[vertex] 패키지가 필요합니다. requirements.txt에 `anthropic[vertex]>=0.40.0`을 추가하세요.")
-    st.stop()
+import vertexai
+from vertexai.generative_models import GenerativeModel, Content, Part
 
 # ── 페이지 설정 ──────────────────────────────────────────────────
 st.set_page_config(
@@ -19,25 +15,51 @@ st.set_page_config(
 
 # ── Vertex AI 클라이언트 ──────────────────────────────────────────
 @st.cache_resource
-def get_client():
+def init_vertex():
     try:
         if "gcp_service_account" not in st.secrets:
-            return None, None, "secrets.toml에 [gcp_service_account] 섹션이 없습니다."
+            return None, "secrets.toml에 [gcp_service_account] 섹션이 없습니다."
         creds_dict = dict(st.secrets["gcp_service_account"])
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(creds_dict, f)
             tmp_path = f.name
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_path
         project_id = creds_dict["project_id"]
-        location = "us-east5"
-        model = "claude-sonnet-4-5@20251001"
+        location = "us-central1"
+        model_name = "gemini-3.1-pro-preview"
         if "gcp" in st.secrets:
             location = st.secrets["gcp"].get("location", location)
-            model = st.secrets["gcp"].get("model", model)
-        client = AnthropicVertex(region=location, project_id=project_id)
-        return client, model, None
+            model_name = st.secrets["gcp"].get("model", model_name)
+        vertexai.init(project=project_id, location=location)
+        return model_name, None
     except Exception as e:
-        return None, None, str(e)
+        return None, str(e)
+
+
+def get_gemini_response(model_name: str, system_prompt: str, messages: list) -> str:
+    """Gemini 모델로 대화 응답을 생성합니다."""
+    model = GenerativeModel(
+        model_name,
+        system_instruction=system_prompt,
+    )
+    # Streamlit 메시지를 Gemini Content 형식으로 변환
+    history = []
+    for msg in messages[:-1]:  # 마지막 메시지 제외 (send_message로 보냄)
+        role = "user" if msg["role"] == "user" else "model"
+        history.append(Content(role=role, parts=[Part.from_text(msg["content"])]))
+
+    chat = model.start_chat(history=history)
+    last_msg = messages[-1]["content"]
+    response = chat.send_message(
+        last_msg,
+        generation_config={
+            "max_output_tokens": 512,
+            "temperature": 0.85,
+            "top_p": 0.92,
+        },
+    )
+    return response.text
+
 
 # ── 공통 멤버 정보 ────────────────────────────────────────────────
 MEMBERS_INFO = """
@@ -447,18 +469,16 @@ else:
     if send and user_input.strip():
         st.session_state.messages.append({"role": "user", "content": user_input})
 
-        client, model, err = get_client()
+        model_name, err = init_vertex()
         if err:
             reply = f"⚠️ 설정 오류: {err}"
         else:
             try:
-                response = client.messages.create(
-                    model=model,
-                    max_tokens=512,
-                    system=char["system"],
-                    messages=st.session_state.messages,
+                reply = get_gemini_response(
+                    model_name,
+                    char["system"],
+                    st.session_state.messages,
                 )
-                reply = response.content[0].text
             except Exception as e:
                 reply = f"...지금은 대화하기 어렵습니다. ({e})"
 
