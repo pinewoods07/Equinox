@@ -1,23 +1,10 @@
 import json
 import tempfile
 import os
-import subprocess
 import streamlit as st
 import streamlit.components.v1 as components
 import vertexai
 from vertexai.generative_models import GenerativeModel, Content, Part
-
-st.set_page_config(
-    page_title="EQUINOX · 에키녹스의 검",
-    page_icon="⚔️",
-    layout="wide",
-)
-
-# ── 임시 디버그: 사용 가능한 모델 확인 후 삭제할 것 ──
-st.warning("⬇️ 디버그 모드: 아래에서 설치된 패키지 버전을 확인하세요")
-result = subprocess.run(["pip", "show", "google-cloud-aiplatform"], capture_output=True, text=True)
-st.code(result.stdout)
-st.stop()
 
 # ── 페이지 설정 ──────────────────────────────────────────────────
 st.set_page_config(
@@ -39,7 +26,7 @@ def init_vertex():
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_path
         project_id = creds_dict["project_id"]
         location = "us-central1"
-        model_name = "gemini-2.5-pro-preview-06-05"
+        model_name = "gemini-3.1-pro-preview"
         if "gcp" in st.secrets:
             location = st.secrets["gcp"].get("location", location)
             model_name = st.secrets["gcp"].get("model", model_name)
