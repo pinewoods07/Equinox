@@ -388,8 +388,7 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
 
-                # 각 캐릭터 색상으로 버튼 스타일 적용
-                st.markdown(f"""
+                                st.markdown(f"""
                 <style>
                 div[data-testid="column"]:nth-child({(i%3)+1}) .stButton > button {{
                     background: transparent !important;
@@ -404,13 +403,6 @@ def main():
                 }}
                 </style>
                 """, unsafe_allow_html=True)
-
-                if st.button(f"{c['emoji']} 대화하기", key=cid, use_container_width=True):
-                    st.session_state.selected = c
-                    st.session_state.messages = [
-                        {"role": "assistant", "content": c["greeting"]}
-                    ]
-                    st.rerun()
     # ── 채팅 뷰 ────────────────────────────────────────────────────
     else:
         with st.sidebar:
