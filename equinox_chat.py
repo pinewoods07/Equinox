@@ -350,36 +350,67 @@ def main():
             cc = c["color"]
             with cols[i % 3]:
                 tags_html = "".join([
-                    f'<span class="char-tag" style="background:{cc}18;color:{cc}BB;border:1px solid {cc}33;">{t}</span>'
+                    f'<span style="display:inline-block;font-size:10px;padding:3px 9px;'
+                    f'border-radius:20px;background:{cc}18;color:{cc}BB;'
+                    f'border:1px solid {cc}33;margin:2px 2px 0 0;">{t}</span>'
                     for t in c["tags"]
                 ])
                 origin = c.get("origin", "")
                 st.markdown(f"""
-                <div class="char-card">
-                    <div class="char-top-line"></div>
+                <div style="
+                    background:linear-gradient(145deg,{cc}0E 0%,#0A0A14 60%);
+                    border:1px solid {cc}55;border-radius:18px;padding:20px;
+                    position:relative;overflow:hidden;margin-bottom:14px;
+                    transition:all .25s;
+                ">
+                    <div style="position:absolute;top:0;left:0;right:0;height:1px;
+                        background:linear-gradient(90deg,transparent,{cc}88,transparent);"></div>
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-                        <div class="char-emoji-wrap" style="background:{cc}18;">{c['emoji']}</div>
+                        <div style="width:44px;height:44px;border-radius:13px;
+                            display:flex;align-items:center;justify-content:center;
+                            font-size:21px;flex-shrink:0;background:{cc}18;
+                            border:1.5px solid {cc}55;">{c['emoji']}</div>
                         <div style="flex:1;">
-                            <div class="char-name">{c['name']}</div>
-                            <div class="char-mbti" style="color:{cc}77;">{c['mbti']}</div>
+                            <div style="font-size:15px;font-weight:700;color:#E2E2F0;">{c['name']}</div>
+                            <div style="font-size:10px;color:{cc}77;margin-top:2px;letter-spacing:1px;">{c['mbti']}</div>
                         </div>
-                        <div class="char-badge" style="background:{cc}14;color:{cc}BB;border:1px solid {cc}44;">{origin}</div>
+                        <div style="font-size:9px;padding:3px 8px;border-radius:12px;
+                            white-space:nowrap;background:{cc}14;color:{cc}BB;
+                            border:1px solid {cc}44;">{origin}</div>
                     </div>
-                    <div class="char-role" style="color:{cc}AA;">{c['role']}</div>
-                    <div class="char-desc">{c.get('desc', '')}</div>
+                    <div style="font-size:10px;letter-spacing:2px;color:{cc}AA;margin-bottom:8px;">{c['role']}</div>
+                    <div style="font-size:12px;color:#44445A;line-height:1.65;margin-bottom:10px;">{c.get('desc','')}</div>
                     <div>{tags_html}</div>
-                    <div class="char-footer" style="border-top:1px solid {cc}22;">
-                        <span class="char-footer-mbti" style="color:{cc}44;">{c['mbti']}</span>
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                        margin-top:10px;padding-top:10px;border-top:1px solid {cc}22;">
+                        <span style="font-size:10px;color:{cc}44;letter-spacing:1px;">{c['mbti']}</span>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+
+                # 각 캐릭터 색상으로 버튼 스타일 적용
+                st.markdown(f"""
+                <style>
+                div[data-testid="column"]:nth-child({(i%3)+1}) .stButton > button {{
+                    background: transparent !important;
+                    color: {cc} !important;
+                    border: 1.5px solid {cc}99 !important;
+                    border-radius: 10px !important;
+                    font-weight: 700 !important;
+                }}
+                div[data-testid="column"]:nth-child({(i%3)+1}) .stButton > button:hover {{
+                    background: {cc}18 !important;
+                    border-color: {cc} !important;
+                }}
+                </style>
+                """, unsafe_allow_html=True)
+
                 if st.button(f"{c['emoji']} 대화하기", key=cid, use_container_width=True):
                     st.session_state.selected = c
                     st.session_state.messages = [
                         {"role": "assistant", "content": c["greeting"]}
                     ]
                     st.rerun()
-
     # ── 채팅 뷰 ────────────────────────────────────────────────────
     else:
         with st.sidebar:
