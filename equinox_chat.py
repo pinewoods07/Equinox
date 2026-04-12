@@ -46,7 +46,7 @@ MEMBERS_INFO = """
 - 사드 카펜터 (🐍): 무기공+협력자(정식 멤버 아님). 23세 남성 175cm. 짙은 청록 반곱슬 5:5 가르마, 연노랑 눈. 중립지대 출신. ENFP. 활달하고 자신감 넘침.
 """
 
-# ── 캐릭터 데이터 ─────────────────────────────────────────────────
+# ── 캐릭터 데이터 (dict 구조 - 작동 확인된 방식) ─────────────────
 CHARACTERS = {
     "hanbyeol": {
         "name": "한 별", "emoji": "⭐", "role": "에키녹스 리더",
@@ -292,41 +292,6 @@ def inject_css(char_color: str):
         background: {char_color}18; border: 1px solid {char_color}44;
         display: flex; align-items: center; justify-content: center; font-size: 16px;
     }}
-
-    /* ── 타이핑 인디케이터 애니메이션 ── */
-    .typing-indicator {{
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        padding: 12px 16px;
-        background: #1A1A26;
-        border: 1px solid #ffffff0A;
-        border-radius: 16px 16px 16px 4px;
-        width: fit-content;
-        margin-bottom: 10px;
-    }}
-    .typing-dot {{
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: {char_color}BB;
-        animation: typingBounce 1.2s infinite ease-in-out;
-    }}
-    .typing-dot:nth-child(1) {{ animation-delay: 0s; }}
-    .typing-dot:nth-child(2) {{ animation-delay: 0.2s; }}
-    .typing-dot:nth-child(3) {{ animation-delay: 0.4s; }}
-
-    @keyframes typingBounce {{
-        0%, 60%, 100% {{
-            transform: translateY(0);
-            opacity: 0.4;
-        }}
-        30% {{
-            transform: translateY(-6px);
-            opacity: 1;
-        }}
-    }}
-
     .stTextInput input {{
         background: #1A1A26 !important; border: 1px solid {char_color}33 !important;
         border-radius: 12px !important; color: #E8E8F0 !important;
@@ -348,30 +313,12 @@ def inject_css(char_color: str):
     """, unsafe_allow_html=True)
 
 
-# ── 타이핑 인디케이터 HTML ────────────────────────────────────────
-def typing_indicator_html(emoji: str) -> str:
-    """점 세 개가 위아래로 튀는 타이핑 인디케이터"""
-    return f"""
-    <div class="msg-wrap-char">
-        <div class="msg-avatar">{emoji}</div>
-        <div class="typing-indicator">
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-        </div>
-    </div>
-    """
-
-
 # ── 메인 ──────────────────────────────────────────────────────────
 def main():
     if "selected" not in st.session_state:
         st.session_state.selected = None
     if "messages" not in st.session_state:
         st.session_state.messages = []
-    # ★ 타이핑 중 여부를 추적하는 state
-    if "is_typing" not in st.session_state:
-        st.session_state.is_typing = False
 
     char = st.session_state.selected
     color = char["color"] if char else "#C9A84C"
@@ -441,6 +388,7 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
 
+                # 각 캐릭터 색상으로 버튼 스타일 적용
                 st.markdown(f"""
                 <style>
                 div[data-testid="column"]:nth-child({(i%3)+1}) .stButton > button {{
@@ -462,9 +410,7 @@ def main():
                     st.session_state.messages = [
                         {"role": "assistant", "content": c["greeting"]}
                     ]
-                    st.session_state.is_typing = False
                     st.rerun()
-
     # ── 채팅 뷰 ────────────────────────────────────────────────────
     else:
         with st.sidebar:
@@ -478,13 +424,11 @@ def main():
             if st.button("← 갤러리로 돌아가기", use_container_width=True):
                 st.session_state.selected = None
                 st.session_state.messages = []
-                st.session_state.is_typing = False
                 st.rerun()
             if st.button("🔄 대화 초기화", use_container_width=True):
                 st.session_state.messages = [
                     {"role": "assistant", "content": char["greeting"]}
                 ]
-                st.session_state.is_typing = False
                 st.rerun()
 
         tags_html = " ".join([f'<span class="chat-tag">{t}</span>' for t in char["tags"]])
@@ -499,7 +443,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
-        # ── 메시지 렌더링 ──
         for msg in st.session_state.messages:
             if msg["role"] == "user":
                 st.markdown(f"""
@@ -515,14 +458,6 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
 
-        # ★ 타이핑 인디케이터: is_typing == True 일 때만 표시
-        typing_placeholder = st.empty()
-        if st.session_state.is_typing:
-            typing_placeholder.markdown(
-                typing_indicator_html(char['emoji']),
-                unsafe_allow_html=True
-            )
-
         st.markdown("<div style='margin-bottom:16px'></div>", unsafe_allow_html=True)
 
         col1, col2 = st.columns([5, 1])
@@ -534,46 +469,26 @@ def main():
         with col2:
             send = st.button("전송", use_container_width=True)
 
-        # ★ 전송 버튼 클릭 시 처리
         if send and user_input.strip():
+            st.session_state.messages.append({"role": "user", "content": user_input})
 
-            # 1) 유저 메시지 저장
-            st.session_state.messages.append(
-                {"role": "user", "content": user_input}
-            )
-
-            # 2) 타이핑 상태 ON → 화면에 ... 표시
-            st.session_state.is_typing = True
-            st.rerun()
-
-        # 3) 타이핑 상태면 실제 API 호출 후 결과 저장
-        if st.session_state.is_typing:
-            last_user_msg = next(
-                (m["content"] for m in reversed(st.session_state.messages)
-                 if m["role"] == "user"), None
-            )
-            if last_user_msg:
-                try:
-                    model = GenerativeModel(
-                        "gemini-2.5-pro-preview-06-05",
-                        system_instruction=char["prompt"],
-                    )
-                    history = [
-                        Content(role=m["role"], parts=[Part.from_text(m["content"])])
-                        for m in st.session_state.messages[:-1]
-                    ]
-                    chat_session = model.start_chat(history=history)
-                    response = chat_session.send_message(last_user_msg)
-                    reply = response.text
-                except Exception as e:
-                    reply = f"...지금은 대화하기 어렵습니다. ({e})"
-
-                # 4) 응답 저장 + 타이핑 상태 OFF
-                st.session_state.messages.append(
-                    {"role": "assistant", "content": reply}
+            try:
+                model = GenerativeModel(
+                    "gemini-3.1-pro-preview",
+                    system_instruction=char["prompt"],
                 )
-                st.session_state.is_typing = False
-                st.rerun()
+                history = [
+                    Content(role=m["role"], parts=[Part.from_text(m["content"])])
+                    for m in st.session_state.messages[:-1]
+                ]
+                chat = model.start_chat(history=history)
+                response = chat.send_message(user_input)
+                reply = response.text
+            except Exception as e:
+                reply = f"...지금은 대화하기 어렵습니다. ({e})"
+
+            st.session_state.messages.append({"role": "assistant", "content": reply})
+            st.rerun()
 
 
 if __name__ == "__main__":
