@@ -196,7 +196,7 @@ CHARACTERS = {
     },
 }
 
-
+# ── CSS ───────────────────────────────────────────────────────────
 def inject_css(char_color: str):
     st.markdown(f"""
     <style>
@@ -225,6 +225,42 @@ def inject_css(char_color: str):
     .gallery-label {{ font-size: 11px; letter-spacing: 6px; color: #444; margin-bottom: 8px; }}
     .gallery-title {{ font-size: 28px; font-weight: 800; color: #E8E8F0; letter-spacing: 1px; margin: 0; }}
     .gallery-sub {{ font-size: 14px; color: #444; margin-top: 10px; }}
+    .char-card {{
+        background: linear-gradient(145deg, {char_color}0E 0%, #0A0A14 60%);
+        border: 1px solid {char_color}55; border-radius: 18px; padding: 20px;
+        position: relative; overflow: hidden; margin-bottom: 14px; transition: all .25s;
+    }}
+    .char-card:hover {{
+        border-color: {char_color}88;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 32px {char_color}22;
+    }}
+    .char-top-line {{
+        position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent, {char_color}88, transparent);
+    }}
+    .char-emoji-wrap {{
+        width: 44px; height: 44px; border-radius: 13px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 21px; flex-shrink: 0;
+        border: 1.5px solid {char_color}55;
+    }}
+    .char-name {{ font-size: 15px; font-weight: 700; color: #E2E2F0; }}
+    .char-mbti {{ font-size: 10px; margin-top: 2px; letter-spacing: 1px; }}
+    .char-badge {{
+        font-size: 9px; padding: 3px 8px; border-radius: 12px; white-space: nowrap;
+    }}
+    .char-role {{ font-size: 10px; letter-spacing: 2px; margin-bottom: 8px; }}
+    .char-desc {{ font-size: 12px; color: #44445A; line-height: 1.65; margin-bottom: 10px; }}
+    .char-tag {{
+        display: inline-block; font-size: 10px; padding: 3px 9px; border-radius: 20px;
+        margin: 2px 2px 0 0;
+    }}
+    .char-footer {{
+        display: flex; justify-content: space-between; align-items: center;
+        margin-top: 10px; padding-top: 10px;
+    }}
+    .char-footer-mbti {{ font-size: 10px; letter-spacing: 1px; }}
     .stButton > button {{
         background: transparent !important;
         color: {char_color} !important;
@@ -275,50 +311,12 @@ def inject_css(char_color: str):
         background: {char_color}18; border: 1px solid {char_color}44;
         display: flex; align-items: center; justify-content: center; font-size: 16px;
     }}
-
-    /* ── 타이핑 인디케이터 ── */
-    .typing-indicator {{
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        padding: 12px 16px;
-        background: #1A1A26;
-        border: 1px solid #ffffff0A;
-        border-radius: 16px 16px 16px 4px;
-        width: fit-content;
-    }}
-    .typing-dot {{
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: {char_color}BB;
-        animation: typingBounce 1.2s infinite ease-in-out;
-    }}
-    .typing-dot:nth-child(1) {{ animation-delay: 0s; }}
-    .typing-dot:nth-child(2) {{ animation-delay: 0.2s; }}
-    .typing-dot:nth-child(3) {{ animation-delay: 0.4s; }}
-    @keyframes typingBounce {{
-        0%, 60%, 100% {{ transform: translateY(0); opacity: 0.4; }}
-        30% {{ transform: translateY(-6px); opacity: 1; }}
-    }}
-
-    /* ── ★ autocomplete 드롭다운 완전 차단 ── */
-    input[autocomplete="off"] {{
-        autocomplete: off !important;
-    }}
-
     .stTextInput input {{
-        background: #1A1A26 !important;
-        border: 1px solid {char_color}33 !important;
-        border-radius: 12px !important;
-        color: #E8E8F0 !important;
-        padding: 10px 16px !important;
-        font-size: 14px !important;
+        background: #1A1A26 !important; border: 1px solid {char_color}33 !important;
+        border-radius: 12px !important; color: #E8E8F0 !important;
+        padding: 10px 16px !important; font-size: 14px !important;
     }}
-    .stTextInput input:focus {{
-        border-color: {char_color}88 !important;
-        box-shadow: none !important;
-    }}
+    .stTextInput input:focus {{ border-color: {char_color}88 !important; box-shadow: none !important; }}
     [data-testid="stSidebar"] {{ background: #0D0D16 !important; border-right: 1px solid #ffffff08 !important; }}
     [data-testid="stSidebar"] * {{ color: #E8E8F0 !important; }}
     [data-testid="stSidebar"] .stButton > button {{
@@ -331,26 +329,10 @@ def inject_css(char_color: str):
     #MainMenu {{ visibility: hidden; }}
     div[data-testid="stVerticalBlock"] > div {{ gap: 0 !important; }}
     </style>
-
-    <!-- ★ JS로 input에 autocomplete=off 강제 적용 -->
-    <script>
-    const applyAutocompleteOff = () => {{
-        const inputs = window.parent.document.querySelectorAll('input[type="text"]');
-        inputs.forEach(input => {{
-            input.setAttribute('autocomplete', 'off');
-            input.setAttribute('autocorrect', 'off');
-            input.setAttribute('autocapitalize', 'off');
-            input.setAttribute('spellcheck', 'false');
-        }});
-    }};
-    // 즉시 실행 + DOM 변경 감지 시 재실행
-    applyAutocompleteOff();
-    const observer = new MutationObserver(applyAutocompleteOff);
-    observer.observe(window.parent.document.body, {{ childList: true, subtree: true }});
-    </script>
     """, unsafe_allow_html=True)
 
 
+# ── 메인 ──────────────────────────────────────────────────────────
 def main():
     if "selected" not in st.session_state:
         st.session_state.selected = None
@@ -425,6 +407,7 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
 
+                # 각 캐릭터 색상으로 버튼 스타일 적용
                 st.markdown(f"""
                 <style>
                 div[data-testid="column"]:nth-child({(i%3)+1}) .stButton > button {{
@@ -447,7 +430,6 @@ def main():
                         {"role": "assistant", "content": c["greeting"]}
                     ]
                     st.rerun()
-
     # ── 채팅 뷰 ────────────────────────────────────────────────────
     else:
         with st.sidebar:
@@ -480,7 +462,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
-        # 기존 메시지 렌더링
         for msg in st.session_state.messages:
             if msg["role"] == "user":
                 st.markdown(f"""
@@ -507,55 +488,25 @@ def main():
         with col2:
             send = st.button("전송", use_container_width=True)
 
-        # ★ rerun 없이 타이핑 인디케이터 → API 호출 → 결과 교체
         if send and user_input.strip():
+            st.session_state.messages.append({"role": "user", "content": user_input})
 
-            # 1) 유저 메시지 즉시 화면에 표시
-            st.markdown(f"""
-            <div class="msg-wrap-user">
-                <div class="msg-user">{user_input}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            # 2) 타이핑 인디케이터 즉시 표시
-            typing_slot = st.empty()
-            typing_slot.markdown(f"""
-            <div class="msg-wrap-char">
-                <div class="msg-avatar">{char['emoji']}</div>
-                <div class="typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            # 3) 유저 메시지 session_state에 저장
-            st.session_state.messages.append(
-                {"role": "user", "content": user_input}
-            )
-
-            # 4) API 호출
             try:
                 model = GenerativeModel(
-                    "gemini-2.0-flash-001",  # ← 안정적인 모델명
+                    "gemini-3.1-pro-preview",
                     system_instruction=char["prompt"],
                 )
                 history = [
                     Content(role=m["role"], parts=[Part.from_text(m["content"])])
                     for m in st.session_state.messages[:-1]
                 ]
-                chat_session = model.start_chat(history=history)
-                response = chat_session.send_message(user_input)
+                chat = model.start_chat(history=history)
+                response = chat.send_message(user_input)
                 reply = response.text
             except Exception as e:
                 reply = f"...지금은 대화하기 어렵습니다. ({e})"
 
-            # 5) 타이핑 인디케이터 제거 후 응답 저장
-            typing_slot.empty()
-            st.session_state.messages.append(
-                {"role": "assistant", "content": reply}
-            )
+            st.session_state.messages.append({"role": "assistant", "content": reply})
             st.rerun()
 
 
