@@ -333,46 +333,6 @@ def inject_css(char_color: str):
     """, unsafe_allow_html=True)
 
 
-# ── 증빙 이미지 사이드바 (항상 표시) ────────────────────────────────
-def render_evidence_sidebar():
-    with st.sidebar:
-        st.markdown("---")
-        st.markdown(
-            "<div style='font-size:10px;letter-spacing:4px;color:#555;margin-bottom:6px;'>EVIDENCE FILE</div>"
-            "<div style='font-size:14px;font-weight:700;color:#E8E8F0;margin-bottom:4px;'>📎 증빙 서류</div>"
-            "<div style='font-size:11px;color:#444;margin-bottom:12px;'>이 캐릭터가 왜 좋은지 설명할 때 쓸 이미지</div>",
-            unsafe_allow_html=True,
-        )
-
-        uploaded = st.file_uploader(
-            "이미지 추가",
-            type=["png", "jpg", "jpeg", "gif", "webp"],
-            accept_multiple_files=True,
-            key="evidence_uploader",
-            label_visibility="collapsed",
-        )
-
-        if uploaded:
-            st.markdown(
-                f"<div style='font-size:10px;color:#555;margin:6px 0 10px;'>"
-                f"📁 {len(uploaded)}장 업로드됨</div>",
-                unsafe_allow_html=True,
-            )
-            for img_file in uploaded:
-                st.image(img_file, use_container_width=True)
-                st.markdown(
-                    f"<div style='font-size:10px;color:#444;margin-bottom:8px;"
-                    f"text-align:center;'>{img_file.name}</div>",
-                    unsafe_allow_html=True,
-                )
-        else:
-            st.markdown(
-                "<div style='border:1px dashed #2A2A3A;border-radius:10px;padding:18px;"
-                "text-align:center;color:#333;font-size:12px;'>클릭하거나 파일을 드래그하세요</div>",
-                unsafe_allow_html=True,
-            )
-
-
 # ── 메인 ──────────────────────────────────────────────────────────
 def main():
     if "selected" not in st.session_state:
@@ -383,9 +343,6 @@ def main():
     char = st.session_state.selected
     color = char["color"] if char else "#C9A84C"
     inject_css(color)
-
-    # ── 증빙 이미지 사이드바는 항상 렌더링 ──────────────────────────
-    render_evidence_sidebar()
 
     mode_label = f"CHAT · {char['name']}" if char else "CHARACTER GALLERY"
     st.markdown(f"""
@@ -451,6 +408,7 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
 
+                # 각 캐릭터 색상으로 버튼 스타일 적용
                 st.markdown(f"""
                 <style>
                 div[data-testid="column"]:nth-child({(i%3)+1}) .stButton > button {{
@@ -473,7 +431,6 @@ def main():
                         {"role": "assistant", "content": c["greeting"]}
                     ]
                     st.rerun()
-
     # ── 채팅 뷰 ────────────────────────────────────────────────────
     else:
         with st.sidebar:
